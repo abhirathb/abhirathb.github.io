@@ -7,11 +7,15 @@ permalink: /posts/
 ---
 # Blog Posts
 
+<table>
 {% for post in site.posts %}
-## <a href="{{post.url}}" style="text-size:medium"> {{post.title}} </a> 
+
+<tr><td><a href="{{post.url}}" style="font-size:x-large;"> {{post.title}} </a>  </td>
+<td style="text-align:right;"> {{post.date}} </td>
+</tr>
 
 
 {% endfor %}
 
-
+</table>
 
