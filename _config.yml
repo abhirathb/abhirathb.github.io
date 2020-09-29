@@ -20,12 +20,13 @@
 
 title: Abhirath Batra
 email: abhs.94@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Personal Website & Blog
+#description: >- # this means to ignore newlines until "baseurl:"
+#  Personal Website & Blog
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://abhirathb.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: abhirathb
 github_username:  abhirathb
+logo: pic.jpg
 
 # Build settings
 theme: jekyll-theme-minimal
