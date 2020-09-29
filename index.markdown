@@ -8,6 +8,12 @@ layout: default
 
 I'm **Abhirath Batra**, working as an Engineer in **Azure Networking at Microsoft**, and currently struggling to write an about page. 
 
-I was a part of a trans-disciplinary program at **IIIT-Hyderabad** where I studied Computer Science, and wrote a Thesis on **Computational Simulations of bio-molecules**. Excited by the possibilities of research in **Computational Biology**, I decided to apply for PhDs. I came close, but not enough. That lead me to work as a Reserch Fellow at **Tata Institute of Fundamental Research**. Here, I tried to use **Bayesian Neural Networks to study what genetic modifications related to susceptibility to addiction**. I tried that PhD again, but didn't get through. So I moved on to work at a Startup in my hometown of Delhi, called **Elucidata**. At Elucidata, I worked at a bunch of things, aligning with the goal of building a product that would enable scientists working in various stages of **Drug-Target discovery to offload their computational workflows**. I discovered there that the function that I enjoyed there the most was Engineering. 
+I'v worked on a random assortment of things including research problems in Computational Biology to Data science and Engineering at a startup solving for data driven Drug-Target Discovery. 
 
-So here I am, having decided that I wanted to build software, to learn among the best at Microsoft!
+Now, I work at Azure Networking, running internal services that plug into the networking infrastructure of Microsoft's massive cloud service.
+
+I like movies, astronomy, music, and of course, tech!
+
+Find me on Twitter to talk about pretty much everything!
+
+ <a href="https://twitter.com/intent/tweet?screen_name=AbhirathB&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false">Tweet to @AbhirathB</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

@@ -1,0 +1,14 @@
+---
+layout: default
+---
+
+<small>{{ page.date | date: "%-d %B %Y" }}</small>
+<h1>{{ page.title }}</h1>
+
+<p class="view">by {{ page.author | default: site.author }}</p>
+
+{{content}}
+
+<hr>
+<small>Share your comments with me on Twitter</small><br>
+<a href="https://twitter.com/intent/tweet?screen_name=AbhirathB&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false">Tweet to @AbhirathB</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
