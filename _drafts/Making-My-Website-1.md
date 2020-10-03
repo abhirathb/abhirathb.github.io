@@ -33,7 +33,11 @@ A good candidate for this seems to be the architecure in vogue i.e.  **Serverles
 * The static stuff will potentially be served by a CDN
 * REST/GraphQL API will sit in Azure Functions
 
-**NB:** I found that Azure has a specific solution for developing this kind of a setup, called [Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/getting-started?tabs=vanilla-javascript)
+**NB:** I found that Azure has a specific solution for developing this kind of a setup, called [Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/getting-started?tabs=vanilla-javascript).
+
+### Side note on choice of Front End framework 
+
+I decided to look at JS based frameworks like Angular, React and Vue and my friends who are FrontEnd experts suggested React as a good entry point. Gatsby looked like an excellent framework to develop static sites. However, it also seemed like overkill at this point since most of site is going to be static. When I do setup pages that have dynamic content, I would like to introduce controlled amounts of JS in an attempt to learn how it works inside. Infact, Jekyll helps that way with static because I can over-ride a theme, and learn CSS on the way, while Liquid as a templating engine takes care of repetitive parts. 
 
 ## Step 0 : Bootstrapping. Because shipping is more important!
 
@@ -49,7 +53,7 @@ At the time of writing this article, this is what my incredibly straightforward 
 ## How to get your personal website to run using Azure Storage and Functions
 
 ### Step 1 : 
-
+Create a new Static Website on Azure
 
 ### Step 2 : 
 
