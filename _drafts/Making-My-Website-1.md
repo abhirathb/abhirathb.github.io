@@ -50,10 +50,28 @@ At the time of writing this article, this is what my incredibly straightforward 
     * CNAME record to point to address
     * A Name records to point to GitHub's DNS servers. [Click Here](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain) for directions.
 
-## How to get your personal website to run using Azure Storage and Functions
+## Migrating my Jekyll generated website to Azure
 
-### Step 1 : 
-Create a new Static Website on Azure
+### Step 1 : The basic setup
 
-### Step 2 : 
+**Setup Azure Static Websites for Jekyll using this rather precise piece of [documentation](https://docs.microsoft.com/en-us/azure/static-web-apps/publish-jekyll)**
+
+* This created a Static Web App in Azure
+* A Github action got created to build the Jekyll website and pick the build from the output directory.
+* Website is now accessible at the URL it gives
+
+### Step 2 : Changing the Domain Name records
+
+* Removed all the DNS records on GoDaddy
+* Replaced that with one CNAME record or the subdomain www. 
+* Add custom domain the Static Website on Azure. 
+
+Now, sadly this results in the website now becoming www.abhirathb.com. I don't necessarily mind that but, I want the root domain to be accesible as well. 
+
+Some amount of Googling seems to suggest that that's not possible on Static Web Apps *Preview* as of now! Atleast not without some special jugglery with DNS records that GoDaddy doesn't seem to allow. Also, I'm not in the mood to do jugglery like that!
+
+So let's regress and look at if we can use Azure Storage
+
+* With that, we will have to attach own cert with CDN as managed certs don't support root domain and i want all flexibility
+* testing out setting up a new branch with action that triggers recplication to azure storage since otherwise copy is hard
 
