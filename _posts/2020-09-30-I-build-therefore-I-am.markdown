@@ -40,3 +40,4 @@ I want to write to essentially journal my learning process for the world to see.
 
 Atlast, after I trying to figure out which framework to use, to how to host the website, here it is, hosted on Github Pages, and generated through Jekyll, my first post!
 
+In my first post, I will write about the first iteration of this website, how I built it so far, and what I learnt in the process and from where!
