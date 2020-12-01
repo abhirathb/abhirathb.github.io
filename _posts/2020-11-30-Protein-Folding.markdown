@@ -48,18 +48,19 @@ Since experimental methods don't answer these questions, we turn to computationa
 
 We model all the atoms as known in a protein as tiny spherical masses, and model the forces between them including electrochemical bonds, nuclear repulsion and weak forces like van der waal forces. Then, we essentially solve newton's second equation of motion(YEP, the one from 9th grade : $$s_t = u_t + 0.2 * a* t^2$$ ) albeit with a different algebraic formulation, for each of the atoms to predict their trajectory in time
 
-Now, if you were using this equation study the a ball thrown into the air and predict it's entire trajectory, you would want to solve this equation for millisecond intervals, to "see" the ball fly up and then come back down in frames. If you were to take a second interval, the snapshots you would predict would be too far apart. 
+Now, if you were using this equation to study a ball thrown into the air and predict it's entire trajectory, you would want to solve this equation for millisecond intervals, to "see" the ball fly up and then come back down in frames. If you were to take a second interval, the snapshots you would predict would be too far apart. 
 
  Similarly for the atoms, since you want to capture the smallest relevant motion, you solve for 2-femto-second intervals, that is the timescale at which molecular bonds move owing to the energy from room temperature heat. This may all seem well and good but it is not!
  IF you were to use a perfect model so that it predicts the real thing, you'd still be modelling a molecule in pure vaccum. However, in the body, all of this exists in a water medium. And in water, properties change because of water's dipole and kinetic interactions with the system. 
+<img src="https://ars.els-cdn.com/content/image/1-s2.0-S1471489210001463-gr1.jpg" />
 
  So, you guessed it, the model is made to contain 10s of thousands of water molecules, arranged in a repeating cube, so that the (ideally) modelled system mimics what the molecule will feel inside a living system. 
  
  Now, here we have 100s of thousands of particles, with pairwise forces defined for them, that too not just of one kind. From those, we predict their position 2 femto seconds later. Cool. But for how many steps do we have to see this? Well, events of interest such as folding happen at timescales of microseconds to miliseconds. That means, you'd have to do 10^10 iterations of this system to see meaningful events happening. 
 
- ## The curse of dimensionality
-
- This method of modelling and simulating trajectories is called <a href="https://en.wikipedia.org/wiki/Molecular_dynamics#:~:text=Molecular%20dynamics%20(MD)%20is%20a,%22evolution%22%20of%20the%20system.">Molecular Dymanics</a>
+## The curse of dimensionality
+ 
+  This method of modelling and simulating trajectories is called <a href="https://en.wikipedia.org/wiki/Molecular_dynamics#:~:text=Molecular%20dynamics%20(MD)%20is%20a,%22evolution%22%20of%20the%20system.">Molecular Dymanics</a>
 
 It would be obvious by now that the amount of computational horsepower these simulations takes is so huge that reserachers rely on highly distributed computing to get any useful information. Many labs use accesses to super computers while companies like D.E.Shaw reserach built a special hardware called <a href="https://en.wikipedia.org/wiki/Anton_(computer)">Anton</a> right in the heart of Manhattan to simulate their molecules. 
 
