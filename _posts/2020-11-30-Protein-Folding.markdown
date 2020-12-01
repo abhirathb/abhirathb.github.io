@@ -33,7 +33,7 @@ Now proteins are manufactures in ribosomes, at immense speed, with immense preci
 This just means, that studying the 3-D structure of proteins is of high importance. It is also important to study the path taken by proteins to fold that way.
 
 ## Methods of measurement
-To see particles that small, the top methods are NMR and XRAY-crystallography. Both these methods fall short in: 
+To see particles that small, NMR and XRAY-crystallography are usually used. Both these methods fall short in: 
 1. Being able to capture the entire dynamics of a protein. i.e., WATCH the folding process happen; since the timescales are too short.
 2. Giving a model that can help predict the 3-d structure of a protein given its sequence
 2. Providing insights into other "meta-stable" conformations which the protein may assume owing to random forces. 
@@ -46,7 +46,7 @@ These measurements are important because they can help us understand WHY a prote
 
 Since experimental methods don't answer these questions, we turn to computational methods. What is done is actually incredibly fascinating! 
 
-We model all the atoms as known in a protein as tiny spherical masses, and model the forces between them including electrochemical bonds, nuclear repulsion and weak forces like van der waal forces. Then, we essentially solve newton's second equation of motion(YEP, the one from 9th grade : $$s_t = u_t + 0.2 * a* t^2$$ ) albeit with a different algebraic formulation, for each of the atoms to predict their trajectory in time
+We model all the atoms as known in a protein as tiny spherical masses, and model the forces between them including electrochemical bonds, nuclear repulsion and weak forces like van der waal forces. Then, we essentially solve newton's second equation of motion(YEP, the one from 9th grade : $$s_t = u_t + 0.5 * a* t^2$$ ) albeit with a different algebraic formulation, for each of the atoms to predict their trajectory in time
 
 Now, if you were using this equation to study a ball thrown into the air and predict it's entire trajectory, you would want to solve this equation for millisecond intervals, to "see" the ball fly up and then come back down in frames. If you were to take a second interval, the snapshots you would predict would be too far apart. 
 
