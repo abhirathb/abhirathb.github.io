@@ -10,7 +10,7 @@ permalink: /posts/
 <table>
 {% for post in site.posts %}
 
-<tr><td><a href="{{post.url}}" style="font-size:x-large;"> {{post.title}} </a>  </td>
+<tr><td><a href="{{post.url}}" style="font-size:large;"> {{post.title}} </a>  </td>
 <td style="text-align:right;"> {{post.date}} </td>
 </tr>
 
