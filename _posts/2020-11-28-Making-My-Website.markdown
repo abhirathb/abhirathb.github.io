@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Where should I host my new website(for Developers)"
+title:  "Building my website - Part 1"
 date:   2020-11-28 00:00:00 +0530
 tags: blog engineering
 author: Abhirath Batra
