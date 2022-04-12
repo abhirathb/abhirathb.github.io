@@ -6,7 +6,7 @@ layout: default
 ---
 # Hello World!
 
-I'm **Abhirath Batra**, working as an Engineer in **Azure Networking at Microsoft**, and currently struggling to write an about page. 
+I'm **Abhirath Batra**, working as an Engineer in **Azure Networking at Microsoft**.
 
 I'v worked on an assortment of things including research problems in Computational Biology to Data science and Engineering at a startup solving for data driven Drug-Target Discovery. 
 
