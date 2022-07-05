@@ -29,6 +29,8 @@ jobs:
           npm install -D tailwindcss@latest
           npm install -D cssnano
           npm install -D @tailwindcss/typography
+          npm i -D tailwindcss-rtl
+
       - name: Build
         run: hugo --minify
 
