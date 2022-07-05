@@ -28,7 +28,7 @@ jobs:
           npm install -D autoprefixer
           npm install -D tailwindcss@latest
           npm install -D cssnano
-          
+          npm install -D @tailwindcss/typography
       - name: Build
         run: hugo --minify
 
