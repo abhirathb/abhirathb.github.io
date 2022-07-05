@@ -27,7 +27,8 @@ jobs:
           npm install -D postcss-cli
           npm install -D autoprefixer
           npm install -D tailwindcss@latest
-
+          npm install -D cssnano
+          
       - name: Build
         run: hugo --minify
 
