@@ -44,6 +44,6 @@ I'm **Abhirath Batra**, working as an Engineer in **Azure Networking at Microsof
 * I started out work at Elucidata, a start-up solving for data driven Drug-Target Discovery. I worked in a variety of roles including Data and Software related. I found that I enjoyed engineering the most!
 * Now, I work at Azure Networking, specifically in **Azure Front Door** which is Microsoft's CDN offering!
 
-My passion is to grow in life to experience it at my terms. Creating software, writing, and science are all means to that end. I enjoy writing about how I process life through the frameworks of science, statistics and probability that my training have lent me. In that pursuit, I'm extremely lucky to have found a life partner in Shilpa, who's finishing her PhD in biology. We bond over science, food and comfort TV like New Girl and How I met your Mother.
-
+I just enjoy chasing my curiosity and creating software, writing, and science are all means to that end. I enjoy writing about how I process life through the frameworks of science, statistics and probability that my training have lent me. In that pursuit, I'm extremely lucky to have found a life partner in Shilpa, who's finishing her PhD in biology. We bond over science, food and comfort TV like New Girl and The Office.
+ 
  
