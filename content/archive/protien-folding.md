@@ -7,7 +7,7 @@ draft: false
 
 ## TLDR 
 
-Just yesterday, Deepmind published a [blog]("https://deepmind.com/blog/article/alphafold-a-solution-to-a-50-year-old-grand-challenge-in-biology") talking about how their AI, AlphaFold2, predicted protein structures in the biennial CASP challenge this year with stunning accuracy. There's been a lot of buzz in the computational science community discussing the ramifications of their work. 
+Just yesterday, Deepmind published a [blog](https://deepmind.com/blog/article/alphafold-a-solution-to-a-50-year-old-grand-challenge-in-biology) talking about how their AI, AlphaFold2, predicted protein structures in the biennial CASP challenge this year with stunning accuracy. There's been a lot of buzz in the computational science community discussing the ramifications of their work. 
 
 If you've seen the buzz and are curious about protein folding, read on...
 This post is supposed to capture the motivation and complexity of the problem for an audience familiar with STEM in some way.
@@ -18,12 +18,12 @@ Majorly, this is a post close to my heart since protein folding is the broad pro
 
 ## Quick introduction
 
-Proteins are fundamental to life, as they quite literally [DO things in the body]("https://www.youtube.com/watch?v=X_tYrnv_o6A"). They transport molecules, help decode the DNA, and digest the food. Infact, they sit at the functional end of the [central dogma of biology]("https://en.wikipedia.org/wiki/Central_dogma_of_molecular_biology")(i.e. DNA-> RNA -> Protein ; DNA is translated into RNA which is transcribed into proteins) ![Central Dogma of Biology]("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Cdmb.svg/1280px-Cdmb.svg.png" "Central Dogma of Biology")
+Proteins are fundamental to life, as they quite literally [DO things in the body](https://www.youtube.com/watch?v=X_tYrnv_o6A). They transport molecules, help decode the DNA, and digest the food. Infact, they sit at the functional end of the [central dogma of biology](https://en.wikipedia.org/wiki/Central_dogma_of_molecular_biology)(i.e. DNA-> RNA -> Protein ; DNA is translated into RNA which is transcribed into proteins) ![Central Dogma of Biology](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Cdmb.svg/1280px-Cdmb.svg.png "Central Dogma of Biology")
 
 ## The fuss about structures
 If you remember high school, they fold into intricate (quaternary) structures that are highly important to their funciton. Structure matters since a lot of what proteins do as mid-sized molecules depend on them mechanically **docking** with other molecules(throwback to coordinate chemistry!). They exist at a size regime that is a fascinating grey area of where mechanical and chemical effects both matter!
 
-![]("https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Docking_representation_2.png/1280px-Docking_representation_2.png")
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Docking_representation_2.png/1280px-Docking_representation_2.png)
 
 Common drugs use this fact. For example, they will try to bind competitively with the target of a protein hence preventing its action (that's how your coffee works!) or attach to a protein at a different site and alter its structure, rendering it useless. 
 
@@ -53,7 +53,7 @@ Now, if you were using this equation to study a ball thrown into the air and pre
  Similarly for the atoms, since you want to capture the smallest relevant motion, you solve for 2-femto-second intervals, that is the timescale at which molecular bonds move owing to the energy from room temperature heat. This may all seem well and good but it is not!
  IF you were to use a perfect model so that it predicts the real thing, you'd still be modelling a molecule in pure vaccum. However, in the body, all of this exists in a water medium. And in water, properties change because of water's dipole and kinetic interactions with the system. 
 
-![]("https://ars.els-cdn.com/content/image/1-s2.0-S1471489210001463-gr1.jpg")
+![](https://ars.els-cdn.com/content/image/1-s2.0-S1471489210001463-gr1.jpg)
 
  So, you guessed it, the model is made to contain 10s of thousands of water molecules, arranged in a repeating cube, so that the (ideally) modelled system mimics what the molecule will feel inside a living system. 
  
@@ -61,11 +61,11 @@ Now, if you were using this equation to study a ball thrown into the air and pre
 
 ## The curse of dimensionality
  
-  This method of modelling and simulating trajectories is called [Molecular Dymanics]("https://en.wikipedia.org/wiki/Molecular_dynamics#:~:text=Molecular%20dynamics%20(MD)%20is%20a,%22evolution%22%20of%20the%20system.")
+  This method of modelling and simulating trajectories is called [Molecular Dymanics](https://en.wikipedia.org/wiki/Molecular_dynamics#:~:text=Molecular%20dynamics%20(MD)%20is%20a,%22evolution%22%20of%20the%20system.)
 
-It would be obvious by now that the amount of computational horsepower these simulations takes is so huge that reserachers rely on highly distributed computing to get any useful information. Many labs use accesses to super computers while companies like D.E.Shaw reserach built a special hardware called [Anton]("https://en.wikipedia.org/wiki/Anton_(computer)") right in the heart of Manhattan to simulate their molecules. 
+It would be obvious by now that the amount of computational horsepower these simulations takes is so huge that reserachers rely on highly distributed computing to get any useful information. Many labs use accesses to super computers while companies like D.E.Shaw reserach built a special hardware called [Anton](https://en.wikipedia.org/wiki/Anton_(computer)) right in the heart of Manhattan to simulate their molecules. 
 
-Vijay Pande's(A16Z) lab from Stanford took the crowdfunding approach with the [Folding at Home]("https://foldingathome.org/") Project to allow users to lend their extra computational capacity to contribute to folding proteins from home. 
+Vijay Pande's(A16Z) lab from Stanford took the crowdfunding approach with the [Folding at Home](https://foldingathome.org/) Project to allow users to lend their extra computational capacity to contribute to folding proteins from home. 
 
 ## Theoretical work-arounds
 
@@ -73,7 +73,7 @@ Yet other fields exist where in this problem is formalised in a way to reduce co
 
 Another major way people approach this problem is to think of it in terms of dimensionality reduction, in that a lot of the internal motion of the molecule is actually irrelevant and the true dynamics of the system happen in lower dimensions that capture true transitions. These lower dimensions can be chemical at times, like the dihedral angles on the peptide bonds of 2 amino acids.
 
-Back in IIIT, the approach I worked on with my advisor Dr. Prabhakar Bhimalapuram was trying to use multiple "replicas" of the same system, with a repulsive force between them to make them sample divergent areas of the probability landscape. Here's a [link]("http://web2py.iiit.ac.in/research_centres/publications/view_publication/mastersthesis/680") if you're interested in reading more. 
+Back in IIIT, the approach I worked on with my advisor Dr. Prabhakar Bhimalapuram was trying to use multiple "replicas" of the same system, with a repulsive force between them to make them sample divergent areas of the probability landscape. Here's a [link](http://web2py.iiit.ac.in/research_centres/publications/view_publication/mastersthesis/680) if you're interested in reading more. 
 
 ## Now comes In AI. 
 AI could help solve the issue in many ways : 
