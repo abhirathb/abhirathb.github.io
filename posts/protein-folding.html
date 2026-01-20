@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Protein folding & The AI 'Solution': A primer for non-scientists by Abhirath Batra">
+    <title>Protein folding & The AI 'Solution' | Abhirath Batra</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-container {
+            max-width: 800px;
+            margin: 100px auto 60px;
+            padding: 0 20px;
+        }
+        .post-header {
+            margin-bottom: 2rem;
+        }
+        .post-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .post-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        .post-content {
+            line-height: 1.8;
+        }
+        .post-content h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .post-content p {
+            margin-bottom: 1.5rem;
+        }
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        .post-content a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        .post-content a:hover {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+        .post-content ol, .post-content ul {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .post-content li {
+            margin-bottom: 0.75rem;
+        }
+        .post-content hr {
+            border: none;
+            border-top: 2px solid var(--border-color);
+            margin: 2rem 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            color: var(--accent-color);
+        }
+        @media (max-width: 768px) {
+            .post-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html">Abhirath Batra</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="post-container">
+        <a href="../index.html#blogs" class="back-link">← Back to Blogs</a>
+
+        <article>
+            <div class="post-header">
+                <h1 class="post-title">Protein folding & The AI 'Solution': A primer for non-scientists</h1>
+                <div class="post-meta">
+                    <span>November 30, 2020</span>
+                    <span>8 min read</span>
+                </div>
+                <div class="divider"></div>
+            </div>
+
+            <div class="post-content">
+                <h2>TLDR</h2>
+                <p>Just yesterday, Deepmind published a <a href="https://deepmind.com/blog/article/alphafold-a-solution-to-a-50-year-old-grand-challenge-in-biology" target="_blank" rel="noopener noreferrer">blog</a> talking about how their AI, AlphaFold2, predicted protein structures in the biennial CASP challenge this year with stunning accuracy. There's been a lot of buzz in the computational science community discussing the ramifications of their work.</p>
+
+                <p>If you've seen the buzz and are curious about protein folding, read on… This post is supposed to capture the motivation and complexity of the problem for an audience familiar with STEM in some way.</p>
+
+                <p>Majorly, this is a post close to my heart since protein folding is the broad problem in which I did my Masters' research. It is the first topic of research I worked in and therefore love talking about!</p>
+
+                <hr>
+
+                <h2>Quick introduction</h2>
+                <p>Proteins are fundamental to life, as they quite literally <a href="https://www.youtube.com/watch?v=X_tYrnv_o6A" target="_blank" rel="noopener noreferrer">DO things in the body</a>. They transport molecules, help decode the DNA, and digest the food. In fact, they sit at the functional end of the <a href="https://en.wikipedia.org/wiki/Central_dogma_of_molecular_biology" target="_blank" rel="noopener noreferrer">central dogma of biology</a> (i.e. DNA → RNA → Protein; DNA is translated into RNA which is transcribed into proteins).</p>
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Cdmb.svg/1280px-Cdmb.svg.png" alt="Central Dogma of Biology" title="Central Dogma of Biology">
+
+                <h2>The fuss about structures</h2>
+                <p>If you remember high school, they fold into intricate (quaternary) structures that are highly important to their function. Structure matters since a lot of what proteins do as mid-sized molecules depend on them mechanically <strong>docking</strong> with other molecules (throwback to coordinate chemistry!). They exist at a size regime that is a fascinating grey area of where mechanical and chemical effects both matter!</p>
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Docking_representation_2.png/1280px-Docking_representation_2.png" alt="Protein docking illustration">
+
+                <p>Common drugs use this fact. For example, they will try to bind competitively with the target of a protein hence preventing its action (that's how your coffee works!) or attach to a protein at a different site and alter its structure, rendering it useless.</p>
+
+                <h2>The fault in our structures</h2>
+                <p>Now proteins are manufactured in ribosomes, at immense speed, with immense precision. But chemical machinery is not without folly. So sometimes it makes mistakes. The sequence stays the same, but like a bead of strings that can be arranged in anyway, it can be misfolded. Misfolded proteins, as you can guess, malfunction! For diseases like Alzheimer's, the misfolding of one protein and its aggregation in the brain is one of the primary candidates of being the root cause.</p>
+
+                <p>This just means, that studying the 3-D structure of proteins is of high importance. It is also important to study the path taken by proteins to fold that way.</p>
+
+                <h2>Methods of measurement</h2>
+                <p>To see particles that small, NMR and X-RAY crystallography are usually used. Both these methods fall short in:</p>
+
+                <ol>
+                    <li>Being able to capture the entire dynamics of a protein, i.e., WATCH the folding process happen; since the timescales are too short.</li>
+                    <li>Giving a model that can help predict the 3-D structure of a protein given its sequence.</li>
+                    <li>Providing insights into other "meta-stable" conformations which the protein may assume owing to random forces.</li>
+                </ol>
+
+                <p><strong>NB: NMR is able to capture proteins dynamics technically. I'm not too familiar with the shortcomings of solution state NMR. If you have questions though, I'd be happy to point you to my friends in TIFR Hyderabad's National NMR facility who can help answer questions.</strong></p>
+
+                <p>These measurements are important because they can help us understand WHY a protein misfolded, and also, how a mutated protein could look folded and thus behave!</p>
+
+                <h2>Enter, Computers!</h2>
+                <p>Since experimental methods don't answer these questions, we turn to computational methods. What is done is actually incredibly fascinating!</p>
+
+                <p>We model all the atoms as known in a protein as tiny spherical masses, and model the forces between them including electrochemical bonds, nuclear repulsion and weak forces like van der Waals forces. Then, we essentially solve Newton's second equation of motion (YEP, the one from 9th grade) albeit with a different algebraic formulation, for each of the atoms to predict their trajectory in time.</p>
+
+                <p>Now, if you were using this equation to study a ball thrown into the air and predict its entire trajectory, you would want to solve this equation for millisecond intervals, to "see" the ball fly up and then come back down in frames. If you were to take a second interval, the snapshots you would predict would be too far apart.</p>
+
+                <p>Similarly for the atoms, since you want to capture the smallest relevant motion, you solve for 2-femtosecond intervals, that is the timescale at which molecular bonds move owing to the energy from room temperature heat. This may all seem well and good but it is not! If you were to use a perfect model so that it predicts the real thing, you'd still be modeling a molecule in pure vacuum. However, in the body, all of this exists in a water medium. And in water, properties change because of water's dipole and kinetic interactions with the system.</p>
+
+                <img src="https://ars.els-cdn.com/content/image/1-s2.0-S1471489210001463-gr1.jpg" alt="Molecular dynamics simulation">
+
+                <p>So, you guessed it, the model is made to contain 10s of thousands of water molecules, arranged in a repeating cube, so that the (ideally) modeled system mimics what the molecule will feel inside a living system.</p>
+
+                <p>Now, here we have 100s of thousands of particles, with pairwise forces defined for them, that too not just of one kind. From those, we predict their position 2 femtoseconds later. Cool. But for how many steps do we have to see this? Well, events of interest such as folding happen at timescales of microseconds to milliseconds. That means, you'd have to do 10^10 iterations of this system to see meaningful events happening.</p>
+
+                <h2>The curse of dimensionality</h2>
+                <p>This method of modeling and simulating trajectories is called <a href="https://en.wikipedia.org/wiki/Molecular_dynamics" target="_blank" rel="noopener noreferrer">Molecular Dynamics</a>.</p>
+
+                <p>It would be obvious by now that the amount of computational horsepower these simulations takes is so huge that researchers rely on highly distributed computing to get any useful information. Many labs use access to supercomputers while companies like D.E. Shaw Research built a special hardware called <a href="https://en.wikipedia.org/wiki/Anton_(computer)" target="_blank" rel="noopener noreferrer">Anton</a> right in the heart of Manhattan to simulate their molecules.</p>
+
+                <p>Vijay Pande's (A16Z) lab from Stanford took the crowdfunding approach with the <a href="https://foldingathome.org/" target="_blank" rel="noopener noreferrer">Folding at Home</a> Project to allow users to lend their extra computational capacity to contribute to folding proteins from home.</p>
+
+                <h2>Theoretical work-arounds</h2>
+                <p>Yet other fields exist wherein this problem is formalized in a way to reduce computational requirements. The problem of seeing rare events like folding can be formalized through statistical mechanics to be a problem of sampling from a high dimensional probability distribution where we don't know the entire distribution, but we have a generator which can generate a new random (almost) draw. The simulation generates these states. There are ways that you can use to make this generator generate rarer samples, by let's say turning up the heat in the system to make the molecules vibrate faster.</p>
+
+                <p>Another major way people approach this problem is to think of it in terms of dimensionality reduction, in that a lot of the internal motion of the molecule is actually irrelevant and the true dynamics of the system happen in lower dimensions that capture true transitions. These lower dimensions can be chemical at times, like the dihedral angles on the peptide bonds of 2 amino acids.</p>
+
+                <p>Back in IIIT, the approach I worked on with my advisor Dr. Prabhakar Bhimalapuram was trying to use multiple "replicas" of the same system, with a repulsive force between them to make them sample divergent areas of the probability landscape. Here's a <a href="http://web2py.iiit.ac.in/research_centres/publications/view_publication/mastersthesis/680" target="_blank" rel="noopener noreferrer">link</a> if you're interested in reading more.</p>
+
+                <h2>Now comes in AI</h2>
+                <p>AI could help solve the issue in many ways:</p>
+
+                <ol>
+                    <li>Help identify lower dimensions in which to simulate and understand the system</li>
+                    <li>Predict rare events given a simulated system</li>
+                    <li>Directly predict folded states</li>
+                </ol>
+
+                <p>The third method is what Deepmind's AlphaFold2 has done. It is a complex model that treats the molecular structure as a spatial graph and is then trained using ~170,000 protein structures available publicly. Using that they predicted structures in the CASP14 challenge with incredible and astonishing accuracy. Their own blog contains details of all the incredible results they have and links to their previous paper.</p>
+
+                <h2>Perspective</h2>
+                <p>Deepmind has been able to achieve via computational magic, something that we watch nature do in the blink of an eye. Of course, that's a trite and an unverifiable take on the universe's functioning. However, the real ramifications are huge. If it is true that we know the first principles that govern the universe, and have such methods as shortcuts to make predictions about what nature would have made given those first principles, we have a complete toolkit! With these 2 you can study molecules with remarkable detail. It not only opens avenues in understanding nuances of what is already there, but also give a huge boost to synthetic biology.</p>
+
+                <p>We would be able to predict the structures of faulty proteins based on mutations from the genes encoding them. On that, free energy calculations (from the MD regime) could lend us enormous power to predict their behavior in organisms and predict drug targets.</p>
+
+                <p>We can enter the regime of large-molecule therapeutics. With this tool, we would be able to design synthetic proteins, predict how they fold, and use them as candidates for all sorts of drugs in the body!</p>
+
+                <p>As usual, our ability to predict the future is severely limited!</p>
+            </div>
+        </article>
+
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+            <a href="../index.html#blogs" class="back-link">← Back to Blogs</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Abhirath Batra. Built with HTML, CSS, and JavaScript.</p>
+        </div>
+    </footer>
+</body>
+</html>
