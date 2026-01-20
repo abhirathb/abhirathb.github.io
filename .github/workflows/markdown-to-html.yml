@@ -52,19 +52,27 @@ jobs:
         run: |
           python .github/scripts/convert_md_to_html.py
 
-      - name: Commit and push HTML files
+      - name: Update index.html with new posts
+        if: steps.changed-files.outputs.files_found == 'true'
+        run: |
+          python .github/scripts/update_index.py
+
+      - name: Commit and push generated files
         if: steps.changed-files.outputs.files_found == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # Add only HTML files in posts/
+          # Add generated HTML files, category pages, and updated index
           git add posts/*.html
+          git add categories/*.html 2>/dev/null || true
+          git add index.html
+          git add posts_metadata.json
 
           # Check if there are changes to commit
           if git diff --staged --quiet; then
-            echo "No HTML changes to commit"
+            echo "No changes to commit"
           else
-            git commit -m "Auto-generate HTML from markdown posts"
+            git commit -m "Auto-generate HTML from markdown posts and update index"
             git push
           fi
