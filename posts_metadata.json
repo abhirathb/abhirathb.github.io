@@ -1,0 +1,15 @@
+[
+  {
+    "title": "Test Post 3",
+    "description": "A quick test for the workflows to add posts",
+    "date": "January 10, 2026",
+    "reading_time": 5,
+    "tags": [
+      "Technology",
+      "Tutorial",
+      "Web Development"
+    ],
+    "filename": "TestPost.html",
+    "html_path": "posts/TestPost.html"
+  }
+]
