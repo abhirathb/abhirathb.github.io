@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
 Auto-update index.html with new blog posts from posts_metadata.json
+Preserves existing posts and merges with new posts from markdown conversions
 """
 
 import os
 import json
 import re
 from datetime import datetime
+from bs4 import BeautifulSoup
 
 def parse_date(date_str):
     """Parse date string to datetime object for sorting."""
@@ -21,6 +23,97 @@ def parse_date(date_str):
         return datetime.now()
     except:
         return datetime.now()
+
+
+def extract_existing_posts(index_content):
+    """Extract existing blog posts from index.html."""
+    existing_posts = []
+
+    # Parse HTML
+    soup = BeautifulSoup(index_content, 'html.parser')
+    blog_grid = soup.find('div', class_='blog-grid')
+
+    if not blog_grid:
+        print("⚠ Could not find blog-grid in index.html")
+        return existing_posts
+
+    # Find all blog cards
+    cards = blog_grid.find_all('article', class_='blog-card')
+
+    for card in cards:
+        try:
+            header = card.find('div', class_='blog-header')
+            if not header:
+                continue
+
+            title_elem = header.find('h3')
+            title = title_elem.get_text(strip=True) if title_elem else 'Untitled'
+
+            # Extract metadata
+            meta = header.find('div', class_='blog-meta')
+            date = 'Unknown'
+            reading_time = 0
+
+            if meta:
+                date_elem = meta.find('span', class_='date')
+                if date_elem:
+                    date = date_elem.get_text(strip=True)
+
+                time_elem = meta.find('span', class_='reading-time')
+                if time_elem:
+                    time_text = time_elem.get_text(strip=True)
+                    # Extract number from "X min read"
+                    match = re.search(r'(\d+)', time_text)
+                    if match:
+                        reading_time = int(match.group(1))
+
+            # Extract description
+            excerpt = card.find('div', class_='blog-excerpt')
+            description = ''
+            if excerpt:
+                # Get all text content
+                description = excerpt.get_text(separator=' ', strip=True)
+
+            # Extract link
+            link_elem = card.find('a', class_='read-more')
+            link = ''
+            is_external = False
+            filename = ''
+
+            if link_elem:
+                link = link_elem.get('href', '')
+                is_external = link.startswith('http')
+
+                if not is_external and link.startswith('posts/'):
+                    filename = link.replace('posts/', '')
+
+            # Extract tags if present
+            tags = []
+            tags_div = header.find('div', style=lambda x: x and 'margin-top' in x)
+            if tags_div:
+                tag_spans = tags_div.find_all('span')
+                tags = [span.get_text(strip=True) for span in tag_spans]
+
+            # Create post dict
+            post = {
+                'title': title,
+                'date': date,
+                'reading_time': reading_time,
+                'description': description,
+                'tags': tags,
+                'filename': filename,
+                'link': link,
+                'external_link': is_external
+            }
+
+            existing_posts.append(post)
+
+        except Exception as e:
+            print(f"⚠ Error parsing blog card: {e}")
+            continue
+
+    print(f"Found {len(existing_posts)} existing posts in index.html")
+    return existing_posts
 
 
 def generate_blog_card_html(post):
@@ -63,27 +156,34 @@ def generate_blog_card_html(post):
     return html
 
 
+def merge_posts(existing_posts, new_posts):
+    """Merge existing posts with new posts, removing duplicates."""
+    # Create a dict for quick lookup by filename
+    merged_dict = {}
+
+    # Add existing posts first
+    for post in existing_posts:
+        key = post.get('filename') or post.get('title')  # Use filename or title as key
+        if key:
+            merged_dict[key] = post
+
+    # Add/update with new posts (they take precedence)
+    for post in new_posts:
+        key = post.get('filename') or post.get('title')
+        if key:
+            merged_dict[key] = post
+
+    # Convert back to list
+    merged_posts = list(merged_dict.values())
+
+    print(f"Merged {len(existing_posts)} existing + {len(new_posts)} new = {len(merged_posts)} total posts")
+
+    return merged_posts
+
+
 def update_index_html():
     """Update index.html with posts from posts_metadata.json."""
     print("Updating index.html with blog posts...")
-
-    # Check if metadata file exists
-    if not os.path.exists('posts_metadata.json'):
-        print("⚠ posts_metadata.json not found, skipping index update")
-        return
-
-    # Load posts metadata
-    with open('posts_metadata.json', 'r', encoding='utf-8') as f:
-        posts = json.load(f)
-
-    if not posts:
-        print("⚠ No posts in metadata, skipping index update")
-        return
-
-    # Sort posts by date (newest first)
-    posts.sort(key=lambda x: parse_date(x['date']), reverse=True)
-
-    print(f"Found {len(posts)} posts to add to index")
 
     # Read current index.html
     if not os.path.exists('index.html'):
@@ -93,32 +193,32 @@ def update_index_html():
     with open('index.html', 'r', encoding='utf-8') as f:
         index_content = f.read()
 
+    # Extract existing posts from index.html
+    existing_posts = extract_existing_posts(index_content)
+
+    # Load new posts from metadata if available
+    new_posts = []
+    if os.path.exists('posts_metadata.json'):
+        with open('posts_metadata.json', 'r', encoding='utf-8') as f:
+            new_posts = json.load(f)
+        print(f"Found {len(new_posts)} new posts from markdown conversion")
+    else:
+        print("⚠ posts_metadata.json not found, only using existing posts")
+
+    # Merge existing and new posts
+    all_posts = merge_posts(existing_posts, new_posts)
+
+    if not all_posts:
+        print("⚠ No posts to add to index")
+        return
+
+    # Sort posts by date (newest first)
+    all_posts.sort(key=lambda x: parse_date(x['date']), reverse=True)
+
     # Generate blog cards HTML
     blog_cards_html = ''
-    for post in posts:
+    for post in all_posts:
         blog_cards_html += generate_blog_card_html(post)
-
-    # Add the Substack card (hardcoded as it's special)
-    substack_card = '''                <article class="blog-card">
-                    <div class="blog-header">
-                        <h3>Organisation of posts</h3>
-                        <div class="blog-meta">
-                            <span class="date">April 28, 2022</span>
-                            <span class="reading-time">1 min read</span>
-                        </div>
-                    </div>
-                    <div class="blog-excerpt">
-                        <p>This is how posts are organised on this site:</p>
-                        <ol>
-                            <li>Substack contains regularly written newsletter.</li>
-                            <li>Older posts are in Archive</li>
-                            <li>This section is for things that I want to be more permanent and not lost in the serialised nature of a newsletter.</li>
-                        </ol>
-                    </div>
-                    <a href="https://abhirathb.substack.com" class="read-more" target="_blank" rel="noopener noreferrer">Visit Substack →</a>
-                </article>
-'''
-    blog_cards_html += substack_card
 
     # Find and replace the blog-grid section
     # Pattern: <div class="blog-grid"> ... </div> (before </div></section>)

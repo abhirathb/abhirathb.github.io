@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install markdown pyyaml python-frontmatter
+          pip install markdown pyyaml python-frontmatter beautifulsoup4
 
       - name: Get changed markdown files
         id: changed-files
