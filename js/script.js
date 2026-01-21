@@ -158,49 +158,121 @@ if (document.readyState === 'loading') {
 
 // Curations functionality
 let curationsData = [];
+let curationsLoaded = false;
+let curationsInitialized = false;
+
+// Validate curation object has required fields
+function isValidCuration(curation) {
+    return curation &&
+           typeof curation.title === 'string' &&
+           typeof curation.link === 'string' &&
+           typeof curation.category === 'string' &&
+           typeof curation.type === 'string' &&
+           (typeof curation.sno === 'number' || typeof curation.sno === 'string');
+}
+
+// Show loading state
+function showLoadingState() {
+    const tbody = document.getElementById('curationsTableBody');
+    if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);"><div style="display: inline-block; margin-right: 0.5rem;">Loading curations...</div></td></tr>';
+    }
+}
 
 // Load curations from JSON file
 async function loadCurations() {
+    if (curationsLoaded) return; // Prevent loading multiple times
+
+    showLoadingState();
+
     try {
         const response = await fetch('data/curations.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         curationsData = await response.json();
-        renderCurations(curationsData);
-        updateSearchCount(curationsData.length, curationsData.length);
+
+        // Filter out invalid curations
+        const validCurations = curationsData.filter(isValidCuration);
+        const invalidCount = curationsData.length - validCurations.length;
+
+        if (invalidCount > 0) {
+            console.warn(`Skipped ${invalidCount} invalid curation(s)`);
+        }
+
+        renderCurations(validCurations);
+        curationsData = validCurations; // Store only valid ones
+
+        if (validCurations.length > 0) {
+            updateSearchCount(validCurations.length, validCurations.length);
+        }
+
+        curationsLoaded = true;
     } catch (error) {
         console.error('Error loading curations:', error);
-        const tbody = document.getElementById('curationsTableBody');
-        if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">Failed to load curations. Please try again later.</td></tr>';
-        }
+        showErrorState();
+        // Don't set curationsLoaded = true on error, allowing retry
     }
 }
+
+// Show error state with retry button
+function showErrorState() {
+    const tbody = document.getElementById('curationsTableBody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center; padding: 2rem;">
+                    <div style="color: var(--text-light); margin-bottom: 1rem;">
+                        Failed to load curations. Please check your connection and try again.
+                    </div>
+                    <button onclick="retryCurationsLoad()" style="padding: 0.5rem 1rem; background-color: var(--secondary-color); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                        Retry
+                    </button>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Retry function (must be global for onclick)
+window.retryCurationsLoad = function() {
+    curationsLoaded = false;
+    loadCurations();
+};
 
 // Render curations table
 function renderCurations(curations) {
     const tbody = document.getElementById('curationsTableBody');
-    if (!tbody) return;
+    if (!tbody) {
+        return;
+    }
 
     if (curations.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">No curations found.</td></tr>';
         return;
     }
 
-    tbody.innerHTML = curations.map(curation => `
-        <tr data-title="${escapeHtml(curation.title.toLowerCase())}">
-            <td>${curation.sno}</td>
-            <td>
-                <a href="${escapeHtml(curation.link)}"
-                   class="curation-title"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   data-original-title="${escapeHtml(curation.title)}">
-                    ${escapeHtml(curation.title)}
-                </a>
-            </td>
-            <td><span class="category-tag">${escapeHtml(curation.category)}</span></td>
-            <td><span class="type-badge">${escapeHtml(curation.type)}</span></td>
-        </tr>
-    `).join('');
+    // Only render valid curations
+    const validRows = curations
+        .filter(isValidCuration)
+        .map(curation => `
+            <tr data-title="${escapeHtml(curation.title.toLowerCase())}">
+                <td>${escapeHtml(String(curation.sno))}</td>
+                <td>
+                    <a href="${escapeHtml(curation.link)}"
+                       class="curation-title"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       data-original-title="${escapeHtml(curation.title)}">
+                        ${escapeHtml(curation.title)}
+                    </a>
+                </td>
+                <td><span class="category-tag">${escapeHtml(curation.category)}</span></td>
+                <td><span class="type-badge">${escapeHtml(curation.type)}</span></td>
+            </tr>
+        `);
+
+    tbody.innerHTML = validRows.join('');
 }
 
 // Escape HTML to prevent XSS
@@ -216,7 +288,9 @@ function highlightText(text, search) {
 
     const escapedText = escapeHtml(text);
     const escapedSearch = escapeHtml(search);
-    const regex = new RegExp(`(${escapedSearch})`, 'gi');
+    // Escape special regex characters in search term
+    const safeSearch = escapedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${safeSearch})`, 'gi');
     return escapedText.replace(regex, '<span class="highlight">$1</span>');
 }
 
@@ -224,10 +298,15 @@ function highlightText(text, search) {
 function updateSearchCount(visible, total) {
     const countElement = document.getElementById('searchCount');
     if (countElement) {
-        if (visible === total) {
-            countElement.textContent = `Showing all ${total} curations`;
+        // Only show count if we have valid data
+        if (total > 0) {
+            if (visible === total) {
+                countElement.textContent = `Showing all ${total} curations`;
+            } else {
+                countElement.textContent = `Showing ${visible} of ${total} curations`;
+            }
         } else {
-            countElement.textContent = `Showing ${visible} of ${total} curations`;
+            countElement.textContent = '';
         }
     }
 }
@@ -269,24 +348,63 @@ function filterCurations(searchTerm) {
     updateSearchCount(visibleCount, curationsData.length);
 }
 
-// Initialize curations when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Load curations data
-    loadCurations();
+// Setup curations search handlers (called once)
+function setupCurationsHandlers() {
+    if (curationsInitialized) return;
 
-    // Setup search functionality
     const searchInput = document.getElementById('curationSearch');
     if (searchInput) {
         searchInput.addEventListener('input', function(e) {
             filterCurations(e.target.value);
         });
 
-        // Clear search on Escape key
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
                 filterCurations('');
             }
         });
+    }
+
+    curationsInitialized = true;
+}
+
+// Lazy load curations when section becomes active
+function onCurationsSectionActive() {
+    setupCurationsHandlers();
+
+    // Only load data if not already loaded
+    if (!curationsLoaded && curationsData.length === 0) {
+        loadCurations();
+    }
+}
+
+// Initialize curations when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup handlers immediately
+    setupCurationsHandlers();
+
+    // Check if curations section is already active on page load
+    const curationsSection = document.getElementById('curations');
+    if (curationsSection && curationsSection.classList.contains('active')) {
+        onCurationsSectionActive();
+    }
+
+    // Listen for navigation to curations section
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        const originalClickHandler = link.onclick;
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#curations') {
+                // Small delay to ensure section is visible first
+                setTimeout(onCurationsSectionActive, 50);
+            }
+        });
+    });
+
+    // Also check hash on page load
+    if (window.location.hash === '#curations') {
+        setTimeout(onCurationsSectionActive, 100);
     }
 });
