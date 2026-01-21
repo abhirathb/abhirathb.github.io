@@ -271,8 +271,130 @@ body {
 
 /* Curations Section */
 .curations-content {
-    max-width: 800px;
+    max-width: 1000px;
     margin-top: 3rem;
+}
+
+.search-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-box {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.search-box:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.search-results-count {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.table-container {
+    overflow-x: auto;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.curations-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.curations-table thead {
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.curations-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.curations-table th:first-child {
+    width: 80px;
+}
+
+.curations-table th:last-child {
+    width: 120px;
+}
+
+.curations-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+.curations-table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+.curations-table tbody tr.hidden {
+    display: none;
+}
+
+.curations-table td {
+    padding: 1rem;
+}
+
+.curations-table td:first-child {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.curations-table .curation-title {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.curations-table .curation-title:hover {
+    color: var(--accent-color);
+}
+
+.curations-table .highlight {
+    background-color: #fff59d;
+    padding: 0.1em 0.2em;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.curations-table .category-tag,
+.curations-table .type-badge {
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.curations-table .category-tag {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.curations-table .type-badge {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
 }
 
 .coming-soon {
@@ -344,6 +466,38 @@ body {
 
     .social-links a {
         text-align: center;
+    }
+
+    .curations-content {
+        max-width: 100%;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-results-count {
+        text-align: center;
+    }
+
+    .curations-table {
+        font-size: 0.85rem;
+    }
+
+    .curations-table th,
+    .curations-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .curations-table th:first-child,
+    .curations-table td:first-child {
+        padding-left: 0.75rem;
+    }
+
+    .curations-table th:last-child,
+    .curations-table td:last-child {
+        padding-right: 0.75rem;
     }
 }
 

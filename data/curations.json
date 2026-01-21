@@ -1,0 +1,72 @@
+[
+  {
+    "sno": 1,
+    "title": "The Bitter Lesson - Rich Sutton",
+    "link": "http://www.incompleteideas.net/IncIdeas/BitterLesson.html",
+    "category": "AI",
+    "type": "Article"
+  },
+  {
+    "sno": 2,
+    "title": "What is ChatGPT Doing and Why Does It Work?",
+    "link": "https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/",
+    "category": "AI",
+    "type": "Article"
+  },
+  {
+    "sno": 3,
+    "title": "The Illustrated Transformer",
+    "link": "http://jalammar.github.io/illustrated-transformer/",
+    "category": "Machine Learning",
+    "type": "Article"
+  },
+  {
+    "sno": 4,
+    "title": "Attention is All You Need",
+    "link": "https://arxiv.org/abs/1706.03762",
+    "category": "Machine Learning",
+    "type": "Paper"
+  },
+  {
+    "sno": 5,
+    "title": "Building a Second Brain",
+    "link": "https://www.buildingasecondbrain.com/",
+    "category": "Productivity",
+    "type": "Article"
+  },
+  {
+    "sno": 6,
+    "title": "How to Take Smart Notes",
+    "link": "https://www.youtube.com/watch?v=nPOI4f7yCag",
+    "category": "Productivity",
+    "type": "Video"
+  },
+  {
+    "sno": 7,
+    "title": "Paul Graham - Do Things That Don't Scale",
+    "link": "http://paulgraham.com/ds.html",
+    "category": "Startups",
+    "type": "Article"
+  },
+  {
+    "sno": 8,
+    "title": "The Gervais Principle",
+    "link": "https://www.ribbonfarm.com/2009/10/07/the-gervais-principle-or-the-office-according-to-the-office/",
+    "category": "Philosophy",
+    "type": "Article"
+  },
+  {
+    "sno": 9,
+    "title": "Meditations on Moloch",
+    "link": "https://slatestarcodex.com/2014/07/30/meditations-on-moloch/",
+    "category": "Philosophy",
+    "type": "Article"
+  },
+  {
+    "sno": 10,
+    "title": "How Complex Systems Fail",
+    "link": "https://how.complexsystems.fail/",
+    "category": "Systems Thinking",
+    "type": "Article"
+  }
+]
