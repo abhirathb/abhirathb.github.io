@@ -155,3 +155,157 @@ if (document.readyState === 'loading') {
 } else {
     observeBlogCards();
 }
+
+// Curations functionality
+let curationsData = [];
+let curationsLoaded = false;
+
+// Load curations from JSON file
+async function loadCurations() {
+    if (curationsLoaded) return; // Prevent loading multiple times
+
+    try {
+        const response = await fetch('data/curations.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        curationsData = await response.json();
+        renderCurations(curationsData);
+        updateSearchCount(curationsData.length, curationsData.length);
+        curationsLoaded = true;
+        console.log('Curations loaded successfully:', curationsData.length);
+    } catch (error) {
+        console.error('Error loading curations:', error);
+        const tbody = document.getElementById('curationsTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">Failed to load curations. Please try again later.</td></tr>';
+        }
+    }
+}
+
+// Render curations table
+function renderCurations(curations) {
+    const tbody = document.getElementById('curationsTableBody');
+    if (!tbody) {
+        console.error('curationsTableBody not found');
+        return;
+    }
+
+    if (curations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">No curations found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = curations.map(curation => `
+        <tr data-title="${escapeHtml(curation.title.toLowerCase())}">
+            <td>${curation.sno}</td>
+            <td>
+                <a href="${escapeHtml(curation.link)}"
+                   class="curation-title"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-original-title="${escapeHtml(curation.title)}">
+                    ${escapeHtml(curation.title)}
+                </a>
+            </td>
+            <td><span class="category-tag">${escapeHtml(curation.category)}</span></td>
+            <td><span class="type-badge">${escapeHtml(curation.type)}</span></td>
+        </tr>
+    `).join('');
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Highlight matching text
+function highlightText(text, search) {
+    if (!search) return escapeHtml(text);
+
+    const escapedText = escapeHtml(text);
+    const escapedSearch = escapeHtml(search);
+    // Escape special regex characters in search term
+    const safeSearch = escapedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${safeSearch})`, 'gi');
+    return escapedText.replace(regex, '<span class="highlight">$1</span>');
+}
+
+// Update search results count
+function updateSearchCount(visible, total) {
+    const countElement = document.getElementById('searchCount');
+    if (countElement) {
+        if (visible === total) {
+            countElement.textContent = `Showing all ${total} curations`;
+        } else {
+            countElement.textContent = `Showing ${visible} of ${total} curations`;
+        }
+    }
+}
+
+// Filter curations based on search input
+function filterCurations(searchTerm) {
+    const tbody = document.getElementById('curationsTableBody');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    const search = searchTerm.toLowerCase().trim();
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const titleAttr = row.getAttribute('data-title');
+        if (!titleAttr) return;
+
+        const titleLink = row.querySelector('.curation-title');
+        if (!titleLink) return;
+
+        const originalTitle = titleLink.getAttribute('data-original-title');
+        if (!originalTitle) return;
+
+        if (!search || titleAttr.includes(search)) {
+            row.classList.remove('hidden');
+            visibleCount++;
+
+            // Update title with highlighting
+            if (search) {
+                titleLink.innerHTML = highlightText(originalTitle, searchTerm);
+            } else {
+                titleLink.textContent = originalTitle;
+            }
+        } else {
+            row.classList.add('hidden');
+        }
+    });
+
+    updateSearchCount(visibleCount, curationsData.length);
+}
+
+// Initialize curations when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing curations...');
+
+    // Load curations data immediately
+    loadCurations();
+
+    // Setup search functionality
+    const searchInput = document.getElementById('curationSearch');
+    if (searchInput) {
+        console.log('Search input found, setting up event listeners');
+        searchInput.addEventListener('input', function(e) {
+            filterCurations(e.target.value);
+        });
+
+        // Clear search on Escape key
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                filterCurations('');
+            }
+        });
+    } else {
+        console.error('curationSearch input not found');
+    }
+});
+
