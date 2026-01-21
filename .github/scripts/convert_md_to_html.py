@@ -23,175 +23,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
     <meta name="keywords" content="{keywords}">
     <title>{title} | Abhirath Batra</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        .post-container {{
-            max-width: 800px;
-            margin: 100px auto 60px;
-            padding: 0 20px;
-        }}
-        .post-header {{
-            margin-bottom: 2rem;
-        }}
-        .post-title {{
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }}
-        .post-meta {{
-            display: flex;
-            gap: 1.5rem;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }}
-        .post-tags {{
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }}
-        .tag {{
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background-color: var(--border-color);
-            color: var(--text-color);
-            border-radius: 15px;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }}
-        .tag:hover {{
-            background-color: var(--secondary-color);
-            color: white;
-        }}
-        .toc {{
-            background-color: #f8f9fa;
-            border-left: 4px solid var(--secondary-color);
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 5px;
-        }}
-        .toc-title {{
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }}
-        .toc ul {{
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }}
-        .toc ul ul {{
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-        }}
-        .toc li {{
-            margin-bottom: 0.5rem;
-        }}
-        .toc a {{
-            color: var(--text-color);
-            text-decoration: none;
-            border-bottom: none;
-            transition: color 0.2s;
-        }}
-        .toc a:hover {{
-            color: var(--secondary-color);
-        }}
-        .post-content {{
-            line-height: 1.8;
-        }}
-        .post-content h2 {{
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            scroll-margin-top: 100px;
-        }}
-        .post-content h3 {{
-            font-size: 1.4rem;
-            color: var(--primary-color);
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            scroll-margin-top: 100px;
-        }}
-        .post-content p {{
-            margin-bottom: 1.5rem;
-        }}
-        .post-content img {{
-            max-width: 100%;
-            height: auto;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }}
-        .post-content a {{
-            color: var(--secondary-color);
-            text-decoration: none;
-            border-bottom: 1px solid var(--secondary-color);
-        }}
-        .post-content a:hover {{
-            color: var(--accent-color);
-            border-bottom-color: var(--accent-color);
-        }}
-        .post-content ol, .post-content ul {{
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }}
-        .post-content li {{
-            margin-bottom: 0.75rem;
-        }}
-        .post-content hr {{
-            border: none;
-            border-top: 2px solid var(--border-color);
-            margin: 2rem 0;
-        }}
-        .post-content strong {{
-            font-weight: 600;
-            color: var(--primary-color);
-        }}
-        .post-content code {{
-            background-color: #f4f4f4;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }}
-        .post-content pre {{
-            background-color: #f4f4f4;
-            padding: 1em;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }}
-        .post-content pre code {{
-            background-color: transparent;
-            padding: 0;
-        }}
-        .post-content blockquote {{
-            border-left: 4px solid var(--secondary-color);
-            padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            color: var(--text-light);
-            font-style: italic;
-        }}
-        .back-link {{
-            display: inline-block;
-            margin-bottom: 2rem;
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }}
-        .back-link:hover {{
-            color: var(--accent-color);
-        }}
-        @media (max-width: 768px) {{
-            .post-title {{
-                font-size: 2rem;
-            }}
-        }}
-    </style>
+    <link rel="stylesheet" href="../css/poststyle.css">
 </head>
 <body>
     <nav class="navbar">
@@ -223,7 +55,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
             </div>
         </article>
 
-        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div class="post-footer">
             <a href="../index.html#blogs" class="back-link">← Back to Blogs</a>
         </div>
     </div>
@@ -472,6 +304,7 @@ def generate_category_pages(all_posts_metadata):
     <meta name="description" content="Posts tagged with {tag}">
     <title>{tag} | Abhirath Batra</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/poststyle.css">
 </head>
 <body>
     <nav class="navbar">
@@ -482,12 +315,12 @@ def generate_category_pages(all_posts_metadata):
         </div>
     </nav>
 
-    <section class="section" style="padding-top: 120px;">
+    <section class="section category-section">
         <div class="container">
-            <a href="../index.html#blogs" style="display: inline-block; margin-bottom: 2rem; color: var(--secondary-color); text-decoration: none;">← Back to Blogs</a>
+            <a href="../index.html#blogs" class="back-link">← Back to Blogs</a>
             <h2>Posts tagged with "{tag}"</h2>
             <div class="divider"></div>
-            <p style="color: var(--text-light); margin-bottom: 2rem;">{len(posts)} post{'s' if len(posts) != 1 else ''}</p>
+            <p class="category-meta">{len(posts)} post{'s' if len(posts) != 1 else ''}</p>
 
             <div class="blog-grid">
 {posts_html}            </div>
