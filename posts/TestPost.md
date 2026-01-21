@@ -1,5 +1,5 @@
 ---
-title: "Test Post"
+title: "Test Post 3"
 date: "January 10, 2026"
 description: "A quick test for the workflows to add posts"
 reading_time: 5
