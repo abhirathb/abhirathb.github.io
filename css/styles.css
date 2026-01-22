@@ -6,15 +6,15 @@
 }
 
 :root {
-    --primary-color: #000;
-    --secondary-color: #4169E1;
-    --accent-color: #4169E1;
-    --text-color: #000;
-    --text-light: #555;
-    --bg-color: #fff;
-    --bg-secondary: #fafafa;
-    --border-color: #000;
-    --grid-pattern: #ddd;
+    --primary-color: #fff;
+    --secondary-color: #fff;
+    --accent-color: #fff;
+    --text-color: #fff;
+    --text-light: #ccc;
+    --bg-color: #4169E1;
+    --bg-secondary: #5179e8;
+    --border-color: #fff;
+    --grid-pattern: rgba(255, 255, 255, 0.3);
     --transition: all 0.2s ease;
 }
 
@@ -407,9 +407,9 @@ body {
 }
 
 .curations-table .highlight {
-    background-color: #fff59d;
+    background-color: rgba(255, 255, 255, 0.3);
     padding: 0.1em 0.2em;
-    border-radius: 3px;
+    border-radius: 0;
     font-weight: 600;
 }
 
