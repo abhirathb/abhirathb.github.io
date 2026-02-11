@@ -40,8 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click event listeners to navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
             const targetId = this.getAttribute('href');
+
+            // Only handle hash links (sections on same page), let other links navigate normally
+            if (!targetId.startsWith('#')) {
+                return; // Let the browser handle external/page links
+            }
+
+            e.preventDefault();
             showSection(targetId);
 
             // Close mobile menu if open
@@ -157,9 +163,13 @@ if (document.readyState === 'loading') {
 }
 
 // Curations functionality
+const CURATIONS_API_URL = 'http://api.abhirathb.com:8000/curated';
 let curationsData = [];
 let curationsLoaded = false;
 let curationsInitialized = false;
+let currentCurationsPage = 1;
+let totalCurationsPages = 1;
+let totalCurations = 0;
 
 // Validate curation object has required fields
 function isValidCuration(curation) {
@@ -167,30 +177,32 @@ function isValidCuration(curation) {
            typeof curation.title === 'string' &&
            typeof curation.link === 'string' &&
            typeof curation.category === 'string' &&
-           typeof curation.type === 'string' &&
-           (typeof curation.sno === 'number' || typeof curation.sno === 'string');
+           (typeof curation.id === 'number' || typeof curation.id === 'string');
 }
 
 // Show loading state
 function showLoadingState() {
     const tbody = document.getElementById('curationsTableBody');
     if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);"><div style="display: inline-block; margin-right: 0.5rem;">Loading curations...</div></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem; color: var(--text-light);"><div style="display: inline-block; margin-right: 0.5rem;">Loading curations...</div></td></tr>';
     }
 }
 
-// Load curations from JSON file
-async function loadCurations() {
-    if (curationsLoaded) return; // Prevent loading multiple times
-
+// Load curations from API
+async function loadCurations(page = 1) {
     showLoadingState();
 
     try {
-        const response = await fetch('data/curations.json');
+        const response = await fetch(`${CURATIONS_API_URL}?page=${page}&page_size=10`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        curationsData = await response.json();
+        const data = await response.json();
+
+        curationsData = data.items || [];
+        currentCurationsPage = data.page || 1;
+        totalCurationsPages = data.total_pages || 1;
+        totalCurations = data.total || 0;
 
         // Filter out invalid curations
         const validCurations = curationsData.filter(isValidCuration);
@@ -201,17 +213,17 @@ async function loadCurations() {
         }
 
         renderCurations(validCurations);
-        curationsData = validCurations; // Store only valid ones
+        renderCurationsPagination();
+        curationsData = validCurations;
 
         if (validCurations.length > 0) {
-            updateSearchCount(validCurations.length, validCurations.length);
+            updateSearchCount(validCurations.length, totalCurations);
         }
 
         curationsLoaded = true;
     } catch (error) {
         console.error('Error loading curations:', error);
         showErrorState();
-        // Don't set curationsLoaded = true on error, allowing retry
     }
 }
 
@@ -221,7 +233,7 @@ function showErrorState() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="4" style="text-align: center; padding: 2rem;">
+                <td colspan="3" style="text-align: center; padding: 2rem;">
                     <div style="color: var(--text-light); margin-bottom: 1rem;">
                         Failed to load curations. Please check your connection and try again.
                     </div>
@@ -237,7 +249,7 @@ function showErrorState() {
 // Retry function (must be global for onclick)
 window.retryCurationsLoad = function() {
     curationsLoaded = false;
-    loadCurations();
+    loadCurations(currentCurationsPage);
 };
 
 // Render curations table
@@ -248,16 +260,18 @@ function renderCurations(curations) {
     }
 
     if (curations.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">No curations found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem; color: var(--text-light);">No curations found.</td></tr>';
         return;
     }
 
-    // Only render valid curations
+    // Calculate serial number based on page
+    const startIndex = (currentCurationsPage - 1) * 10;
+
     const validRows = curations
         .filter(isValidCuration)
-        .map(curation => `
+        .map((curation, index) => `
             <tr data-title="${escapeHtml(curation.title.toLowerCase())}">
-                <td>${escapeHtml(String(curation.sno))}</td>
+                <td>${startIndex + index + 1}</td>
                 <td>
                     <a href="${escapeHtml(curation.link)}"
                        class="curation-title"
@@ -268,12 +282,71 @@ function renderCurations(curations) {
                     </a>
                 </td>
                 <td><span class="category-tag">${escapeHtml(curation.category)}</span></td>
-                <td><span class="type-badge">${escapeHtml(curation.type)}</span></td>
             </tr>
         `);
 
     tbody.innerHTML = validRows.join('');
 }
+
+// Render pagination controls
+function renderCurationsPagination() {
+    const paginationContainer = document.getElementById('curationsPagination');
+    if (!paginationContainer) return;
+
+    if (totalCurationsPages <= 1) {
+        paginationContainer.innerHTML = '';
+        return;
+    }
+
+    let paginationHtml = '<div class="pagination-controls">';
+
+    // Previous button
+    paginationHtml += `<button class="pagination-btn ${currentCurationsPage === 1 ? 'disabled' : ''}"
+        onclick="goToCurationsPage(${currentCurationsPage - 1})"
+        ${currentCurationsPage === 1 ? 'disabled' : ''}>Prev</button>`;
+
+    // Page numbers
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentCurationsPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalCurationsPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage < maxVisiblePages - 1) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    if (startPage > 1) {
+        paginationHtml += `<button class="pagination-btn" onclick="goToCurationsPage(1)">1</button>`;
+        if (startPage > 2) {
+            paginationHtml += `<span class="pagination-ellipsis">...</span>`;
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        paginationHtml += `<button class="pagination-btn ${i === currentCurationsPage ? 'active' : ''}"
+            onclick="goToCurationsPage(${i})">${i}</button>`;
+    }
+
+    if (endPage < totalCurationsPages) {
+        if (endPage < totalCurationsPages - 1) {
+            paginationHtml += `<span class="pagination-ellipsis">...</span>`;
+        }
+        paginationHtml += `<button class="pagination-btn" onclick="goToCurationsPage(${totalCurationsPages})">${totalCurationsPages}</button>`;
+    }
+
+    // Next button
+    paginationHtml += `<button class="pagination-btn ${currentCurationsPage === totalCurationsPages ? 'disabled' : ''}"
+        onclick="goToCurationsPage(${currentCurationsPage + 1})"
+        ${currentCurationsPage === totalCurationsPages ? 'disabled' : ''}>Next</button>`;
+
+    paginationHtml += '</div>';
+    paginationContainer.innerHTML = paginationHtml;
+}
+
+// Go to specific page (must be global for onclick)
+window.goToCurationsPage = function(page) {
+    if (page < 1 || page > totalCurationsPages || page === currentCurationsPage) return;
+    loadCurations(page);
+};
 
 // Escape HTML to prevent XSS
 function escapeHtml(text) {
@@ -298,20 +371,15 @@ function highlightText(text, search) {
 function updateSearchCount(visible, total) {
     const countElement = document.getElementById('searchCount');
     if (countElement) {
-        // Only show count if we have valid data
         if (total > 0) {
-            if (visible === total) {
-                countElement.textContent = `Showing all ${total} curations`;
-            } else {
-                countElement.textContent = `Showing ${visible} of ${total} curations`;
-            }
+            countElement.textContent = `Page ${currentCurationsPage} of ${totalCurationsPages} (${total} total)`;
         } else {
             countElement.textContent = '';
         }
     }
 }
 
-// Filter curations based on search input
+// Filter curations based on search input (client-side filtering for current page)
 function filterCurations(searchTerm) {
     const tbody = document.getElementById('curationsTableBody');
     if (!tbody) return;
@@ -344,8 +412,6 @@ function filterCurations(searchTerm) {
             row.classList.add('hidden');
         }
     });
-
-    updateSearchCount(visibleCount, curationsData.length);
 }
 
 // Setup curations search handlers (called once)
@@ -375,7 +441,7 @@ function onCurationsSectionActive() {
 
     // Only load data if not already loaded
     if (!curationsLoaded && curationsData.length === 0) {
-        loadCurations();
+        loadCurations(1);
     }
 }
 
