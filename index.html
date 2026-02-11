@@ -22,6 +22,7 @@
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#blogs" class="nav-link">Blogs</a></li>
+                <li><a href="feed.html" class="nav-link">Feed</a></li>
                 <li><a href="#curations" class="nav-link">Curations</a></li>
             </ul>
         </div>
@@ -144,6 +145,7 @@
         <div class="container">
             <h2>Curations</h2>
             <div class="divider"></div>
+            <p class="section-description">Articles, papers, and resources I've found valuable enough to recommend.</p>
 
             <div class="curations-content">
                 <div class="search-container">
@@ -155,16 +157,19 @@
                     <table class="curations-table" id="curationsTable">
                         <thead>
                             <tr>
-                                <th>S.No</th>
+                                <th class="sno-col">S.No</th>
                                 <th>Title</th>
-                                <th>Category</th>
-                                <th>Type</th>
+                                <th class="category-col">Category</th>
                             </tr>
                         </thead>
                         <tbody id="curationsTableBody">
                             <!-- Populated by JavaScript -->
                         </tbody>
                     </table>
+                </div>
+
+                <div class="pagination" id="curationsPagination">
+                    <!-- Populated by JavaScript -->
                 </div>
             </div>
         </div>
