@@ -1,18 +1,5 @@
 [
-  {
-    "title": "Test Post 3",
-    "description": "A quick test for the workflows to add posts",
-    "date": "January 10, 2026",
-    "reading_time": 5,
-    "tags": [
-      "Technology",
-      "Tutorial",
-      "Web Development"
-    ],
-    "filename": "TestPost.html",
-    "html_path": "posts/TestPost.html"
-  },
-  {
+ {
     "title": "Protein folding & The AI 'Solution': A primer for non-scientists",
     "description": "Just yesterday, Deepmind published a blog talking about how their AI, AlphaFold2, predicted protein structures in the biennial CASP challenge this year with stunning accuracy. There's been a lot of buzz in the computational science community discussing the ramifications of their work. If you've seen the buzz and are curious about protein folding, read on... This post is supposed to capture the motivation and complexity of the problem for an audience familiar with STEM in some way.",
     "date": "November 30, 2020",
