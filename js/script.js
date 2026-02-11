@@ -163,7 +163,7 @@ if (document.readyState === 'loading') {
 }
 
 // Curations functionality
-const CURATIONS_API_URL = 'http://46.37.122.34:8000/curated';
+const CURATIONS_API_URL = 'http://api.abhirathb.com:8000/curated';
 let curationsData = [];
 let curationsLoaded = false;
 let curationsInitialized = false;

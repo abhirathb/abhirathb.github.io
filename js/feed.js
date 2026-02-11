@@ -1,5 +1,5 @@
 // Feed functionality
-const FEED_API_URL = 'http://46.37.122.34:8000/feed';
+const FEED_API_URL = 'http://api.abhirathb.com:8000/feed';
 let feedData = [];
 let feedLoaded = false;
 let feedInitialized = false;
